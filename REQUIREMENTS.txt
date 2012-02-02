@@ -1,0 +1,6 @@
+Django==1.3.1
+## FIXME: could not find svn URL in dependency_links for this package:
+flup==1.0.3.dev-20110405
+path.py==2.2.2
+wsgiref==0.1.2
+yolk==0.4.1

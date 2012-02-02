@@ -1,0 +1,98 @@
+#!/bin/bash
+
+# Start (or restart as needed) the FastCGI daemon for this Django project. 
+# This is designed to work with virtual environments and assumes that the # environmental variable $VIRTUAL_ENV has been properly configured. 
+# TODO list currently running processes.
+#      Kill processes by name
+
+INSTANCE_ID="fcgi-dev"
+
+# Record the process id so we can stop this process later on
+PROJECT_ROOT=$PWD
+PIDFILE="$VIRTUAL_ENV/pid/$INSTANCE_ID.pid"   # Where to store the pid file
+SOCKET="$VIRTUAL_ENV/sock/$INSTANCE_ID.sock"  # Where to put the socket 
+WEB_USER="www-data"                           # The user for the web-server. Needs read/write permission to the socket
+MAX_CHILDREN=10
+MAX_SPARE=5
+MIN_SPARE=2
+
+# print verbose output (if > 0)
+VERBOSE=0
+
+usage() {
+    # Print usage statement
+cat << EOF
+usage: $0 [options]
+
+Start (or restart as needed) the FastCGI deamon for this Django project.
+
+OPTIONS:
+  -h            Show this message
+  -m path       Path to main project directory. This should contain manage.py
+                Defaults to current directory.
+  -v            Verbose
+EOF
+}
+
+make_directory() {
+    # Makes a new directory in the current working directory, if that 
+    # directory does not already exist. 
+    if [ ! -d $1 ] ; then
+        [ $VERBOSE -gt 0 ] && echo "Creating directory: $PWD/$1"
+        mkdir $1
+
+        setfacl -m u:$WEB_USER:x $1
+    fi
+}
+
+# process any command line options
+while getopts .hvm:?. OPTION
+do
+    case $OPTION in
+    h) usage ; exit 1 ;;
+    v) VERBOSE=1 ;;
+    m) 
+        PROJECT_ROOT=$OPTARG 
+        if [ ! -e "$PROJECT_ROOT/manage.py" ] ; then
+            echo "Could not find mangage.py file at $PROJECT_ROOT. Please call this script from the same directory as your manage.py file or else specify the path to this file using the -m option." 
+            usage
+            exit 1
+        fi
+        ;;
+    ?) usage ; exit ;;
+    esac
+done
+
+
+cd $VIRTUAL_ENV
+
+# Make directory for pid and socket files if needed
+make_directory "pid"
+make_directory "sock"
+
+# stop the server
+if [ -f $PIDFILE ]; then
+    [ $VERBOSE -gt 0 ] && echo "  Stopping server ... "
+    kill `cat -- $PIDFILE`
+    rm -f -- $PIDFILE       
+    rm -f -- $SOCKET
+fi
+
+# start the server 
+[ $VERBOSE  -gt 0 ] && echo "  Starting server ... "
+python $PROJECT_ROOT/manage.py runfcgi \
+    --settings=settings.common \
+    maxchildren=$MAX_CHILDREN maxspare=$MAX_SPARE minspare=$MIN_SPARE \
+    method=prefork socket=$SOCKET pidfile=$PIDFILE  
+
+# give the web user RW permissions on the socket
+setfacl -m u:$WEB_USER:rw $SOCKET
+
+# check to see if the socket was created
+if [ -e $SOCKET ] ; then 
+    echo "Running FastCGI daemon: $SOCKET"
+    exit
+else
+    echo "ERROR: Could not start FastCGI daemon"
+    exit 1
+fi
