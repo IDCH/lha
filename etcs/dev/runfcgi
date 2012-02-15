@@ -1,7 +1,8 @@
 #!/bin/bash
 
 # Start (or restart as needed) the FastCGI daemon for this Django project. 
-# This is designed to work with virtual environments and assumes that the # environmental variable $VIRTUAL_ENV has been properly configured. 
+# This is designed to work with virtual environments and assumes that the 
+# environmental variable $VIRTUAL_ENV has been properly configured. 
 # TODO list currently running processes.
 #      Kill processes by name
 
@@ -15,6 +16,7 @@ WEB_USER="www-data"                           # The user for the web-server. Nee
 MAX_CHILDREN=10
 MAX_SPARE=5
 MIN_SPARE=2
+SETTINGS="settings.base_settings"
 
 # print verbose output (if > 0)
 VERBOSE=0
@@ -28,6 +30,8 @@ Start (or restart as needed) the FastCGI deamon for this Django project.
 
 OPTIONS:
   -h            Show this message
+  -s module     The settings module to use with this server. Defaults to
+                $SETTINGS.
   -m path       Path to main project directory. This should contain manage.py
                 Defaults to current directory.
   -v            Verbose
@@ -46,11 +50,14 @@ make_directory() {
 }
 
 # process any command line options
-while getopts .hvm:?. OPTION
+while getopts .hvs:m:?. OPTION
 do
     case $OPTION in
     h) usage ; exit 1 ;;
     v) VERBOSE=1 ;;
+    s) 
+        SETTINGS=$OPTARG 
+        # TODO test to ensure that this is valide?
     m) 
         PROJECT_ROOT=$OPTARG 
         if [ ! -e "$PROJECT_ROOT/manage.py" ] ; then
@@ -81,9 +88,9 @@ fi
 # start the server 
 [ $VERBOSE  -gt 0 ] && echo "  Starting server ... "
 python $PROJECT_ROOT/manage.py runfcgi \
-    --settings=settings.common \
+    --settings=$SETTINGS \
     maxchildren=$MAX_CHILDREN maxspare=$MAX_SPARE minspare=$MIN_SPARE \
-    method=prefork socket=$SOCKET pidfile=$PIDFILE  
+    method=prefork socket=$SOCKET pidfile=$PIDFILE  > tmp.txt
 
 # give the web user RW permissions on the socket
 setfacl -m u:$WEB_USER:rw $SOCKET
