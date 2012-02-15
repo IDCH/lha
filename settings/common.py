@@ -1,40 +1,31 @@
-# Django settings for lha project.
-import sys
 import logging
-from path import path
 
-DEBUG = False
+# This file contains settings that are common across different configurations
+# and deployments of this project along with more or less sensible defaults
+# for some values that may need to be overridden for specific configurations.
+#
+# Note that this file is checked into source control, so it is important 
+# that it not contain confidential information such as database passwords 
+# and/or secret keys.
+
+DEBUG = True
 TEMPLATE_DEBUG = DEBUG
+SITE_ID = 1
+TIME_ZONE = 'America/Chicago'
+LANGUAGE_CODE = 'en-us'
+USE_I18N = True
+USE_L10N = True
 
+# Admins and Managers
+# A tuple that lists people who get code error notifications. When DEBUG=False
+# and a view raises an exception, Django will email these people with the full 
+# exception information. Each member of the tuple should be a tuple of 
+# (Full name, email address).
 ADMINS = (
     ('Neal Audenaert', 'neal@idch.org'),
 )
 
 MANAGERS = ADMINS
-
-# Default paramters for the time zone, language code, etc.
-# These can be overwritten in a deployment specific file.
-TIME_ZONE = 'America/Chicago'
-LANGUAGE_CODE = 'en-us'
-SITE_ID = 1
-USE_I18N = True
-USE_L10N = True
-
-# Configure the main directories for this project
-SITE_ROOT = PROJECT_ROOT.dirname()
-SITE_URL = "http://lha.idch.org/"
-
-PROJECT_ROOT = path(__file__).abspath().dirname().dirname()
-MEDIA_ROOT = PROJECT_ROOT / 'media'
-MEDIA_URL = SITE_URL + '/media/'
-ADMIN_MEDIA_PREFIX = '/media/'
-
-ROOT_URLCONF = 'lha.urls'
-
-# Add apps/ and lib/ to the Python path
-sys.path.append(SITE_ROOT)
-sys.path.append(PROJECT_ROOT / 'apps')
-sys.path.append(PROJECT_ROOT / 'libs')
 
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
@@ -56,9 +47,7 @@ TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
-    unicode(PROJECT_ROOT / 'templates'),
 )
-
 
 INSTALLED_APPS = (
     'django.contrib.auth',
@@ -66,13 +55,15 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.sites',
     'django.contrib.messages',
+    'django.contrib.staticfiles',
     # Uncomment the next line to enable the admin:
     # 'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
 )
 
-# CONFIGURE BASIC LOGGING
+
+# Basic Logging Configuration
 LOG_DATE_FORMAT = '%d %b %Y %H:%M:%S'
 LOG_FORMATTER = logging.Formatter(
             u'%(asctime)s | %(levelname)-7s | %(name)s | %(message)s',
