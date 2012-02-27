@@ -3,7 +3,7 @@ import sys
 import logging
 from path import path
 
-DEBUG = True
+DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
@@ -29,7 +29,7 @@ MEDIA_ROOT = PROJECT_ROOT / 'media'
 MEDIA_URL = SITE_URL + '/media/'
 ADMIN_MEDIA_PREFIX = '/media/'
 
-ROOT_URLCONF = 'django-lha.urls'
+ROOT_URLCONF = 'lha.urls'
 
 # Add apps/ and lib/ to the Python path
 sys.path.append(SITE_ROOT)
