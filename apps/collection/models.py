@@ -1,5 +1,6 @@
 from django.db import models
 from idch.util import short_url
+import datetime
 
 class Person(models.Model):
     """ Represents a natural person, for example, the author of a document. 
@@ -64,9 +65,7 @@ class Person(models.Model):
         """
         
         (last, first) = Person.parse(person_name)
-        person = Person()
-        person.last = last
-        person.first = first
+        person = Person(last=last, first=first)
         person.save()
         
         return person
@@ -186,45 +185,144 @@ class Author(models.Model):
 #    
 
 
-class DocumentInstance(models.Model):
+#===============================================================================================
+# FileRecord Class
+#===============================================================================================
+
+def one_or_none(results):
+    if len(results) == 0:
+        return None
+    else:
+        return results[0]
+
+class FileRecord(models.Model):
     """ Maintains a reference to a concrete digital form of this document, for example, a
         PDF file or an HTML document.
     """
-    document = models.ForeignKey(Document)
-    uri = models.CharField(max_length=255)
 
-    # description and features of this document (e.g., searchable, black and white) that 
-    # might make it distinct from other instances 
-    description = models.CharField(max_length=255)      
-    
-    # compute and store MD5.
-#    
+    # STATIC METHODS 
+    #--------------------------------------------------------------------------
+
+    @staticmethod
+    def find(md5):
+        """ Finds a FileRecord for the file with the specified MD5 hash. This
+            should be used prior to creating a new FileRecord to ensure that
+            the file being created is not simply a file that has moved or
+            been renamed. 
+
+            Returns the file record that matches the supplied MD5 hash or None
+            if no records match.
+        """
+              
+        return one_or_none(FileRecord.objects.filter(md5=md5))
+
+    @staticmethod
+    def get_by_path(path):
+        """ Returns the FileRecord for the file with the specified relative 
+            path or None if no such file has been loaded. 
+        """
+
+        return one_or_none(FileRecord.objects.filter(filepath=path))
+
+    @staticmethod
+    def get_by_id(short_id):
+        """ Returns the FileRecord with the specified unique id. This is 
+            assumed to be the short form URL returned by 'uid()' rather than
+            the raw numeric URL.
+        """
+        record_id = short_url.decode_url(short_id)
+        return FileRecord.objects.get(id=record_id)
+
+    # Properties
+    #--------------------------------------------------------------------------
+
+    # The Document this file is associated with
+    document = models.ForeignKey(Document, null=True)  
+
+    # Description and features of this document (e.g., searchable, black and
+    # white) that might make it distinct from other instances 
+    description = models.CharField(max_length=255, default="")
+
+    # The type of document this is
+    mime_type = models.CharField(max_length=32, default="")
+
+    # The path to this file relative to the top-level directory. All files are 
+    # assumed to be organized in one top-level directory. We don't store this 
+    # in the database so that the main document directory can be rearranged 
+    # on the file system and/or moved between computers without restriction. 
+    # The structure of files under that top-level directory is assumed to be 
+    # relatively stable over time.
+    filepath = models.CharField(max_length=255, unique=True)
+
+    # An MD5 hash of this files contents. This is used for integrity checks 
+    # and to detect changes in which a file may have been moved or renamed 
+    # but has the same contents (for our purposes, is the same file) as one
+    # that has previously been added to the collection.
+    md5 = models.CharField(max_length=34, unique=True)      
+
+    # The date this file was first added to the collection.
+    first_added = models.DateTimeField("First Added", 
+                                       auto_now_add=True)   
+
+    # The date any information about this file was last updated.
+    last_modified = models.DateTimeField("Last Record Modification", 
+                                         default=datetime.datetime.now)     
+
+    # The date the file data was last updated. In general, if the file on
+    # disk changed after this date, the record needs to be checked.
+    last_updated = models.DateTimeField("Last File Update", 
+                                        default=datetime.datetime.now)                   
+
+    # The date the file integrity for this file was last checked.
+    last_checked = models.DateTimeField("Last Integrity Check", 
+                                        default=datetime.datetime.now)                   
 
 
-class FileRecord(models.Model):
-    """ Maintains information about a files that have been and are being imported
-    """
-    INPROGRESS = "prog"
-    UPLOADED = "load"
-    FAILED = "fail"
-    DELETED = "dele"
+
+    # TODO enable status checking and multi-stage publication
+    status = None           # Status of this document. Public/Private/Archived/Restricted
+
     
-    STATUS_CHOICES = (
-        (INPROGRESS, 'In Progress'),
-        (UPLOADED, 'Uploaded'),
-        (FAILED, 'Failed'),
-        (DELETED, 'Deleted'),
-    )
-    
-    base_path = models.CharField(max_length=255)
-    relative_path = models.CharField(max_length=255)
-    md5 = models.CharField(max_length=32)                       # MAKE UNIQUE, INDEX
-    status = models.CharField(max_length=4, choices=STATUS_CHOICES, default=INPROGRESS)
-    
-    def _get_ident(self):
-        if self.id:
-            return short_url.encode_url(self.id)
-        else:
-            return None
-            
-    ident = property(_get_ident)
+    # Instatnce Methods
+    #--------------------------------------------------------------------------
+
+    def uid(self):
+        return short_url.encode_url(self.id)
+
+    def update(self, relpath):
+        """ Updates the file associated with this FileRecord.
+        """
+        pass
+
+#===============================================================================================
+# Other Kruft
+#===============================================================================================
+
+
+# class FileRecord(models.Model):
+#     """ Maintains information about a files that have been and are being imported
+#     """
+#     INPROGRESS = "prog"
+#     UPLOADED = "load"
+#     FAILED = "fail"
+#     DELETED = "dele"
+#     
+#     STATUS_CHOICES = (
+#         (INPROGRESS, 'In Progress'),
+#         (UPLOADED, 'Uploaded'),
+#         (FAILED, 'Failed'),
+#         (DELETED, 'Deleted'),
+#     )
+#     
+#     base_path = models.CharField(max_length=255)
+#     relative_path = models.CharField(max_length=255)
+#     md5 = models.CharField(max_length=32)                       # MAKE UNIQUE, INDEX
+#     status = models.CharField(max_length=4, choices=STATUS_CHOICES, default=INPROGRESS)
+#     
+#     def _get_ident(self):
+#         if self.id:
+#             return short_url.encode_url(self.id)
+#         else:
+#             return None
+#             
+#     ident = property(_get_ident)
