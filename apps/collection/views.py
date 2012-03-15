@@ -1,14 +1,17 @@
 import json
+from django.conf import settings
 from django.views.decorators.http import require_http_methods
 from django.views.decorators.gzip import gzip_page
 
 from StringIO import StringIO
 from django.http import HttpResponse
-from lha.collection.models import Document, Person
+from collection.models import Document, Person
 
-API_ENDPOINT = "http://localhost:8000"
-
-
+if hasattr(settings, 'COLLECTION_API_ENDPOINT'):
+    API_ENDPOINT = settings.COLLECTION_API_ENDPOINT
+else: 
+    # TODO raise an exception. . . this needs to be configured
+    API_ENDPOINT = "/collection"
 
 _API_VERSION_ = 0.1
 
