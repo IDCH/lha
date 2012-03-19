@@ -15,6 +15,7 @@ TIME_ZONE = 'America/Chicago'
 LANGUAGE_CODE = 'en-us'
 USE_I18N = True
 USE_L10N = True
+ROOT_URLCONF='urls'
 
 # Admins and Managers
 # A tuple that lists people who get code error notifications. When DEBUG=False
@@ -50,6 +51,7 @@ TEMPLATE_DIRS = (
 )
 
 INSTALLED_APPS = (
+    'collection',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',

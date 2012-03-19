@@ -1,0 +1,104 @@
+# Django settings for lha project.
+import sys
+from path import path
+
+try:
+    from common import *
+except ImportError:
+    print("Could not import common settings. Fearlessly pressing on.")
+    pass
+
+# COMMON PARAMETERS
+# ---------------------------------------------------------------------------
+# These are specified in settings.common, but you may need to change them to
+# reflect the needs of a specific deployment.
+
+# DEBUG = True
+# TEMPLATE_DEBUG = DEBUG
+# ADMINS = (
+#    ('Your Name', 'your@email.org'),
+# )
+# MANAGERS = ADMINS
+
+
+# STATIC FILES
+# ---------------------------------------------------------------------------
+# There are two main types of static files that will typically be associated
+# with a project. Media files are resources that are uploaded to your site 
+# by users. Static files are resources (CSS, JavaScript, images, etc) that
+# are bundled with your application.
+#
+# We use the `django.contrib.staticfiles` app to manage static files within
+# a project. For more details, see the online documentation here:
+# https://docs.djangoproject.com/en/dev/howto/static-files/
+#
+# MEDIA_ROOT    The absolute filesystem path to the directory that will hold 
+#               user-uploaded files. For deployment, this will typically be
+#               something like "/web/<project>/media/". This directory needs 
+#               to be writable by www-data.
+# 
+# MEDIA_URL     The URL that handles the media served from MEDIA_ROOT. Make
+#               sure to use a trailing slash if there is a path component 
+#               (optional in other cases). Examples: "http://idch.org/media/"
+#
+# ADMIN_MEDIA_PREFIX  URL prefix for admin media -- CSS, JavaScript and 
+#               images. Make sure to use a trailing slash. 
+#               Examples: "http://idch.org/media/", "/media/".
+#
+# STATIC_ROOT   The filesystem path you'd like your static files collected 
+#               to when you use the collectstatic management command. 
+#               Example: /web/<project>/www/static
+#
+# STATIC_URL    The public URL for your static files (in most cases, the 
+#               default value of /static/ is just fine)
+
+# Configure the main directories for this project
+PROJECT_ROOT = path(__file__).abspath().dirname().dirname()
+
+# SITE_ROOT = PROJECT_ROOT.dirname() # if using the site/project dir config.
+SITE_ROOT = path("/path/to/site/root/")
+SITE_URL = "http://your.domain.org/"
+
+MEDIA_ROOT = SITE_ROOT / 'uploads'
+MEDIA_URL = SITE_URL + '/media/'
+ADMIN_MEDIA_PREFIX = '/media/'
+
+STATIC_ROOT = PROJECT_ROOT / 'static'
+STATIC_URL = SITE_URL + '/static/'
+
+# Add apps/ and lib/ to the Python path
+sys.path.append(SITE_ROOT)
+sys.path.append(PROJECT_ROOT / 'apps')
+sys.path.append(PROJECT_ROOT / 'libs')
+
+
+# DATABASE CONFIGURATION
+# ---------------------------------------------------------------------------
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
+        'NAME': 'mydb',                        # Or path to database file if using sqlite3.
+        'USER': 'mydbuser',                  # Not used with sqlite3.
+        'PASSWORD': 'changeme',               # Not used with sqlite3.
+        'HOST': '',                           # Set to empty string for localhost. Not used with sqlite3.
+        'PORT': '',                           # Set to empty string for default. Not used with sqlite3.
+    }
+}
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
+#         'NAME': '',                      # Or path to database file if using sqlite3.
+#         'USER': '',                      # Not used with sqlite3.
+#         'PASSWORD': '',                  # Not used with sqlite3.
+#         'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
+#         'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
+#     }
+# }
+
+# Make this unique, and don't share it with anybody. You can generate a new 
+# secret key here: http://www.miniwebtool.com/django-secret-key-generator/
+SECRET_KEY = 'CHANGE THIS OR BAD THINGS HAPPEN'
+
+COLLECTION_API_ENDPOINT = SITE_URL + 'collection'
