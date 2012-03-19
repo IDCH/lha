@@ -16,7 +16,7 @@ WEB_USER="www-data"                           # The user for the web-server. Nee
 MAX_CHILDREN=10
 MAX_SPARE=5
 MIN_SPARE=2
-SETTINGS="settings.base_settings"
+SETTINGS="settings.settings"
 
 # print verbose output (if > 0)
 VERBOSE=0
@@ -56,8 +56,8 @@ do
     h) usage ; exit 1 ;;
     v) VERBOSE=1 ;;
     s) 
-        SETTINGS=$OPTARG 
-        # TODO test to ensure that this is valide?
+        SETTINGS=$OPTARG ;;
+        # TODO test to ensure that this is valid?
     m) 
         PROJECT_ROOT=$OPTARG 
         if [ ! -e "$PROJECT_ROOT/manage.py" ] ; then
