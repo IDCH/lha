@@ -7,12 +7,15 @@ import os
 import sys
 import re
 import hashlib
+import string
+import urllib
+
 try: 
-    from lha.apps.collection.models import Person, Document, Author
+    from collection.models import Person, Document, Author
 except ImportError:
     try:
         import settings.settings
-        from lha.apps.collection.models import Person, Document, Author
+        from collection.models import Person, Document, Author
     except ImportError:
         print("Could not import Django Environment.")
         raise
@@ -115,7 +118,7 @@ def get_doc_ident(author, role, title, ed, vol, pubdate):
         ident += "(" + pubdate + ")"
         
     # TODO additional normalization for whitespace, capitalization, etc
-    return ident
+    return ident.lowercase()
             
 
 
@@ -137,7 +140,7 @@ TITLE_REGEX = re.compile(r"""
         \.(?P<ext>[a-zA-Z]*)$                  # filepath extension
     """, re.VERBOSE)
 
-class DocumentFileImporter:        
+class DocumentFileParser:        
     """ Used to manage the import process of a single document.
     
         This class maintains the state variables associated with importing 
@@ -145,10 +148,11 @@ class DocumentFileImporter:
     """
     filepath = None     # The full path of the file to be processed
     author = None       # The author of this document
+    author_role = None
     authorname = None
+
     publication = None
 
-    author_role = None
     title = None
     edition = None
     volume = None
@@ -160,11 +164,31 @@ class DocumentFileImporter:
     unrecognized = False
     ignored = False
         
-    def __init__(self, filename):
+    def __init__(self, filename, root_path, log):
+        """ Constructs a new DocumentFileImporter
+          
+            filename The path to the file to be imported. This should be an
+              absolute path.
+            root_path the relative path to the main document directory. 
+              Documents are assumed to be organized in a semi-standardized
+              directory tree.
+
+        """
+        # TODO fix the documentation
+
         # need to convert the filename into Unicode before we start using it
         filename = unicode(filename, sys.getfilesystemencoding())
-        print("Processing %s" % (filename))
+        root_path = unicode(root_path, sys.getfilesystemencoding())
+
         self.filepath = filename
+        self.rootpath = root_path 
+        self.log = log
+
+    def get_relpath(self):
+        path = os.path.normpath(os.path.realpath(self.filepath))
+        root = os.path.normpath(os.path.realpath(self.rootpath))
+        
+        return os.path.relpath(path, root)
     
     def _extract_author_or_publication(self, parts):
         """ Extracts information about the author of a document or the publication
@@ -173,14 +197,16 @@ class DocumentFileImporter:
         if len(parts) <= 2:
             return              # category/work.ext (no author folder)
         
-        directory = parts[1]
+        directory = parts[-2]
         if PUBLICATION_REGEX.search(directory):
             # This directory has the contents of a publication, not an author's works
             self.publication = directory
+            self.log.debug("... By: %s" % self.publication)
         else:
             # This directory represents the formated name of the author for 
             # documents in this directory
             self.authorname = directory
+            self.log.debug("... By: %s" % self.authorname)
                     
     def _extract_category(self, parts):
         """ Extracts information about a document's category from the file path.
@@ -216,6 +242,7 @@ class DocumentFileImporter:
         """ Creates a new document. This is called by the main parser loop if the document 
             being imported is not already present in the system. 
         """
+        return # FIXME move to a different class
         document = get_doc(self.title, edition=self.edition, volume=self.volume)
         if document:
             return document
@@ -246,6 +273,7 @@ class DocumentFileImporter:
             being imported.
         """
         global document_table
+        self.log.debug("... Parsing filename %s" % (filename))
     
         m = TITLE_REGEX.search(filename)
         if (m != None):
@@ -274,8 +302,56 @@ class DocumentFileImporter:
         else:
             self.unrecognized = True
         
-        return not self.unrecognized
-        
+    def md5(self, force=False):
+        """ Returns an MD5 hash of this file. Note that if the file changes 
+            after the hash is first computed, this will not not recompute the 
+            hash unless the 'force' parameter is set to true.
+        """
+        if self.md5 is None or force:
+            self.md5 = compute_md5(self.filepath)
+        return self.md5
+
+    def __unicode__(self):
+        result = ""
+        if self.authorname is not None:
+#            result = urllib.quote(self.authorname.encode("UTF-8"), safe=' ')
+            result = self.authorname
+        else:
+            result = "unknown"
+
+        if self.title is not None:
+            result = result + ". " + self.title + "."
+        else:
+            result = result + ". unknown."
+
+        if self.edition is not None:
+            result = result + " " + self.edition 
+
+        if self.volume is not None:
+            result = result + " " + self.volume
+
+        return result
+
+    def __str__(self):
+        return self.__unicode__().encode("UTF-8")
+
+    def parse(self):
+        self.log.debug("Parsing %s" % (self.filepath))
+
+        parts = split_path(self.filepath, self.rootpath);
+        # self._extract_category(parts)
+        self._extract_author_or_publication(parts)
+        self._parse_filename(parts[-1])
+
+#        if self.unrecognized:
+#            return False
+#        
+#        print("    Importing Document: %s" % (self.title))
+#        self._create_bibliographic_record()
+#        
+#        document_desc = parts[-1]
+        pass
+
     def process(self):
         """ Imports this file into the Library of Historical Apologetics. 
         """
@@ -286,17 +362,5 @@ class DocumentFileImporter:
             return
         
         md5digest = compute_md5(self.filepath)
-        print(md5digest)
-#        parts = split_path(self.filepath, root_path);
-#        self._extract_category(parts)
-#        self._extract_author_or_publication(parts)
-#        recognized = self._parse_filename(filename)
-#        if not recognized:
-#            return False
-#        
-#        print("    Importing Document: %s" % (self.title))
-#        self._create_bibliographic_record()
-#        
-#        document_desc = parts[-1]
 
 
