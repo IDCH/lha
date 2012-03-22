@@ -1,0 +1,18 @@
+/* File: bookdetails.css
+ * Created: 10 May 2011
+ * Description
+ *      Implements CSS styles for displaying details about books in the collection. 
+ *
+ */
+ 
+div.author-group { }
+
+
+p.bookinfo { }
+p.bookinfo span.author {}
+p.bookinfo span.author span.last {}
+p.bookinfo span.author span.first {}
+
+p.bookinfo span.title { }
+p.bookinfo span.pubinfo { }
+

@@ -1,0 +1,320 @@
+/* File: styles.css
+ * Created: 10 May 2011
+ * Description: 
+ *     CSS Styles for the Library of Historical Apologetics Site. These are derived from, but not
+ *     identical to the WordPress based implementation currently deployed on the main site. The 
+ *     overall design is based on a template by Denise Mitchinson (http://www.mitchinson.net/)
+ * 
+ * Version: 0.1 
+ * Author: Neal Audenaert
+ * Author URI: http://DigitalChristianHeritage.org
+ * Tags: 
+*/
+
+/* ***************************
+ * Main Structure
+ * *************************** */
+html, body { height: 100%; }
+
+body { 
+  margin:0; padding:0; font: 75% verdana, helvetica, arial, sans-serif;
+  line-height: 1.8em; color: #333; background: #fff;
+}
+
+#frame { min-height: 90%; min-width:1010px; }
+#footer { min-height:10%; background: #000;}
+
+/* ***************************
+ * LINKS
+ * *************************** */
+a:link, a:visited {  color:#993333; text-decoration:none; }
+a:hover { text-decoration: underline; color: #aaa; }
+
+h1 a { color:inherit; }
+h2 a { color:inherit; }
+
+/* ***************************
+ * TYPOGRAPHY
+ * *************************** */
+blockquote { font-weight : normal; color : #6897C0; }
+.category-spotlight blockquote { color : #333; }
+h1 { font:normal 1.7em georgia, arial, Helvetica, sans-serif; color:#993333; padding:10px; }
+h2 { color:#963; font-size:1.4em;padding-bottom:0px;margin-bottom:5px;padding-left:10px; }
+/* Used as a topical sub-heading on the roadmap page */
+h5 { color:#999; font-size:1em; font-weight:bold; padding-left:10px; margin:0px; } 
+p { padding-left:10px; padding-right:10px; }
+p strong { color: #993333; }
+
+#welcome { font-weight:bold; font-size:1.4em; color:#6897C0; font-family:Helvetica, TrebuchetMS, arial, Helvetica, sans-serif; }
+
+div.navigation { height:3em; } 
+div.navigation div.alignleft { padding:0px; margin:0px; height:1.2em; } 
+div.navigation div.alignright { height:1.2em;  } 
+/* ***************************
+ * IMAGES
+ * *************************** */               
+div.alignleft { float:left;margin-right: 20px; padding: 10px; border: 0px solid #eee;} 
+div.alignright { float:right;margin-left: 20px; padding: 10px; border: 0px solid #eee;} 
+p.wp-caption-text { margin:0px; padding:0px; text-align:center; line-height:1.1em; font-size:1em}
+/*a img { border:0px; }
+.imgleft  { float: left; margin-right: 20px; padding: 10px; border: 0px solid #eee; }
+.imgright { float: right; margin-left: 20px; padding: 10px; border: 0px solid #eee; }
+*/
+
+/* ***************************
+ * HEADER
+ * *************************** */   
+.home #header {
+  height: 155px;
+  width:100%;
+  padding-top:0;
+  background:#007EBB url(images/header.png) repeat-x;
+  overflow:hidden;
+  /* background:#007EBB url(images/header.jpg) no-repeat; */
+}
+
+.home #header .logo { float: left; margin-left:40px;margin-top:5px; }
+.home #header .logo img { border:none; }    
+.home #header .sitename {
+  width   : 500px;
+  padding : 30px 0 0 0; 
+  margin  : 0 0 0 370px;
+  font    : bold 2em georgia, sans-serif;
+  color   : #DCE4F6;
+  letter-spacing: 5px;
+  font-variant:small-caps;
+}
+.home #header .sitename span.grp-1 { display:block; }
+.home #header .sitename span.grp-2 { display:block; }
+.home #header .sitename span.grp-3 { display:block; letter-spacing: 3px;}
+
+.home #header .tagline { display:block; }
+#header .tagline {
+  float:right;
+  font: bold 1.3em georgia, sans-serif;
+  color:#BBB;
+  margin-right:25px;
+}
+
+#header {
+  height: 50px;
+  width:100%;
+  padding-top:0;
+  background:#007EBB url(images/header.png) repeat-x;
+  overflow:hidden;
+}
+
+#header .logo { float: left; margin-left:40px;margin-top:0px; }
+#header .logo img { border:none; }
+
+#header .sitename {
+  width   : 550px;
+  padding : 20px 0 0 0; 
+  margin  : 0px 0px 0px 360px;
+  font    : bold 1.6em georgia, sans-serif;
+  color   : #DCE4F6;
+  letter-spacing: 5px;
+  font-variant:small-caps;
+}
+#header .sitename span.grp-1 { display:inline; }
+#header .sitename span.grp-2 { display:inline; }
+#header .sitename span.grp-3 { display:inline; }
+    
+#header .tagline { display:none; }
+
+/* ***************************
+ * TOP NAVBAR
+ * *************************** */
+#topnav {
+  position:relative;
+  display:block;
+  height:39px;
+  margin:0 0 10px 0;
+  background:transparent url(images/bgOFF.gif) repeat-x top left;
+  font: bold 1em Arial,Verdana,Helvitica,sans-serif;
+}
+
+#topnav  ul { margin:0; padding:0; list-style-type:none; width:auto; }
+#topnav  ul li { display:block; float:left; margin:0; }
+
+#topnav  ul li a {letter-spacing: 2px;
+  display:block;
+  float:left;
+  padding:11px 20px 0 20px;
+  height:23px;
+  text-decoration:none;
+  color:#666;
+  background:transparent url(images/bgDIVIDER.gif) no-repeat top right;
+}
+
+#topnav  ul li a:hover {
+  color:#993333; background:#fff url(images/bgON.gif) no-repeat top left; }
+
+#topnav ul li.current_page_item a, #topnav ul li.current_page_ancestor a {
+      color:#993333; }
+
+/* ***************************
+ * LEFT SIDEBAR
+ * *************************** */
+#sidebar {
+  float:left;
+  min-width:160px;
+  width:15%;
+  background:transparent;
+  height:100%;
+  padding-top:0;
+  border-right: 1px solid #eee;
+}
+
+#sidebar iframe { margin-top:10px; }
+
+#sidebar h1 { padding-left:0px;}
+#sidebar blockquote { margin:0px; padding:0px; }
+#sidebar blockquote p { margin:0px; padding:0px; padding-left:10px; padding-right:10px; }
+#sidebar img { padding-left: 15px; }
+
+#sidebar h1 {font-size:1.4em;letter-spacing: 1px;margin-bottom:5px;padding-bottom:0px; }
+
+/* Sidebar navigation links. */
+#navlist { padding-left: 0; margin-left: 0px; border-bottom: 1px solid #eee; width: auto; }
+#navlist li { list-style: none; margin: 0px; padding:0px; padding: 3px; border-top: 1px solid #eee; }
+#navlist li a { text-decoration: none; color: #aaa; padding-left:20px; display:block; }
+#navlist li a:hover { text-decoration: none;color: #993333;  background :url(images/arrow.png) left center no-repeat;}
+#navlist li.current_page_item a { padding-left:20px; color:#993333; font-weight:bold; background :url(images/arrow.png) left center no-repeat; }
+
+#sidebar ul#advisors { margin:0px; list-style-type:none; padding:0px; padding-left:10px; } 
+
+/* news items */
+#news .newsitem { }
+#news .newsitem span { display:block; }
+#news .newsitem span.date { font-size:0.8em; line-height:0.9em;color:#BBB; font-weight:bold; } 
+#news .newsitem span.title { }
+#news .newsitem span.title a, .newsitem span.title a:visited { color:#666; }  
+
+#news .newsitem span.title a:hover, .newsitem span.title a:active  { color:#993333; }
+
+/* ***************************
+ * MAIN CONTENT
+ * *************************** */
+.gutter { float : left; width : 1%; height : 1px; }
+
+#col1 { float:left; width: 40%; min-width:450px; margin-left:1%; margin-right:1%; }
+#col2 { float:left; width: 30%; min-width:360px;}
+
+.one-col #col1 { width: 60%; }
+.one-col #col2 { display: none; }
+
+/* HICHGLIGHT BOXES -- LEFT */
+/* FIXME the highlights section has been removed. */
+#highlights { margin-top:10px; }
+#highlights h2 { 
+    color:#993333; font-size:1.4em; letter-spacing:0px; 
+    margin:0px; margin-bottom:5px; padding-bottom:0px; padding-top:0px; }
+
+#highlights div  { float:left; margin:0px; padding-top:0px; margin-top:10px; }
+#highlights div.left  { width: 40%; border-right:1px solid #BAD0BF; min-height:100px; }
+#highlights div.right { width: 58%; }
+
+/* newsletter signup */
+#signup form { padding-left:10px; width:250px; }
+#signup form input[type=text] { font-size:1.2em; border:1px solid #999; }
+#signup form input[type=submit] { font-size:1.1em; font-family:Verdana,Geneva,Arial,Helvetica,sans-serif; }
+#signup div.safesubscribe { text-align:center; width:100%; margin-top:5px;} 
+
+#signup p.info { font-size:0.8em; line-height:1.2em; margin-top:30px; color:#AAA; }
+
+
+/* Column 2 content - QotW. */
+.home #col2 h1 { margin-top:0px; }
+#qotw blockquote { margin:0px; margin-left:15px; padding:0px; }
+#qotw .author { text-align:right; }
+#qotw a { color:inherit; }
+#qotw a:hover { text-decoration:underline; }
+#qotw h1 a { color:inherit; }
+#qotw h1 a:hover  { text-decoration:underline; }
+
+/* Column 2 content - Spotlight. */
+#spotlight img { float: left; margin-right: 20px; padding: 10px; border: 0px solid #eee; }
+#spotlight h1  { margin-bottom:5px; }
+#spotlight h2 { margin:0px; padding:0px; padding-left: 10px; margin-bottom:3px; font-size:1.2em; }
+#spotlight h2 a  { color: #666; font-size:1.0em; }
+#spotlight h2 a:hover  { text-decoration:underline; }
+#spotlight p   { margin-top:0px; }
+
+/* Column 2 content - Spotlight. */
+#giving #onetime { float:left; width:48%; text-align:center;}
+#giving #monthly { float:left; width:48%; text-align:center; }
+#giving h2 { color:#993333; margin:0px; padding:0px; margin-top:20px; margin-bottom:3px; font-size:1.2em; }
+#giving form { text-align:center; width:100%; }
+#giving select { display:block; margin-top:10px; margin-bottom:15px; }
+#giving .donate { padding-left:10px; margin-top:15px; text-align:center; width:115px; }
+
+/* ***************************
+ * FOOTER
+ * *************************** */                           
+#footer { 
+  float:left; width:100%;
+  padding-top:10px; padding-bottom:0;
+  text-align:center;
+  background:#000 url(images/foot.jpg) repeat-x;
+  color:#DCE4F6;
+}
+
+
+/* ***************************
+ * INTERNAL PAGES 
+ * *************************** */
+.page-template-news-php p.date { margin-top:-20px; color:#AAA; font-weight:bold;}
+
+/* People Page */
+.page-template-people-php div.advisor { margin-bottom:20px;padding-left:10px;padding-right:10px; }
+.page-template-people-php div.advisor span.name { display:block; font-weight:bold;font-size:1.2em; }
+.page-template-people-php div.advisor span.name a { color:inherit; }
+.page-template-people-php div.advisor span.affiliation { display:block;font-style:italic; }
+
+.page-template-people-php div.staff { margin-bottom:20px;padding-left:10px;padding-right:10px; }
+.page-template-people-php div.staff span.name { display:block; font-weight:bold;font-size:1.2em; }
+.page-template-people-php div.staff span.name a { color:inherit; }
+.page-template-people-php div.staff span.position { display:block; color:#999; font-weight:bold; }
+.page-template-people-php div.staff p.bio { margin-top:0px;  margin-top:5px; padding-left:0px; } 
+
+/* FAQ Page */
+.page-template-faq-php #col1 h2 { color:#963; font-size:1.2em;padding-bottom:0px;margin-bottom:5px; }
+.page-template-faq-php #col1 p { margin-top:0px; } 
+
+/* Sketches (Annotated Bibliography) */
+.page-template-sketches-php #col1 h2 { color:#963; font-size:1.2em;padding-bottom:0px;margin-bottom:5px; }
+p.bib-ref { font-size:1.2em; padding-left:25px; }
+p.bib-ref span.author { font-weight:bold; }
+
+/* ********************* * 
+ * WORK IN PROGRESS HERE *
+ * ********************* */
+
+
+
+/* ***************************
+ * LOGIN BOX
+ * *************************** */
+#loginform { width:auto; margin:10px 10px 10px 0; }
+#loginform fieldset { padding:10px; }
+#loginform legend { font-weight:bold; font-size:9pt; }
+#loginform label{
+  display:block;
+  height:2em;
+  background:#ECF2ED;
+  padding:10px 10px 0;
+}
+
+#loginform input {
+  margin-right : 15px;
+  border       : 1px solid #999;
+  float        : right; 
+  clear        : right;
+  background   : #fff;
+  color        : #96B89D;
+}
+
+#loginform input:focus,#loginform input:hover { border:1px solid #333; }
+
+.error{ color:red; font-weight:bold; }

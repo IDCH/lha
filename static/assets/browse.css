@@ -1,0 +1,72 @@
+/**
+ * File: browse.css
+ * Created: 17 May 2011
+ * Author: Neal Audenaert <neal@idch.org>
+ * Description: 
+ *   CSS Styles for use in the browsing interface.
+ */
+ 
+/** The frame in which the list of retrieved documents is displayed. */
+ol#doc-list-frame {
+  overflow:hidden;
+  overflow-y:auto;
+  border:1px solid #CCC;
+  min-height:450px;
+  max-height:450px;
+  list-style-type:none;
+  margin:0px;padding:0px;
+  padding-right:3ex;
+}
+
+#doc-list-frame li.author-group {
+}
+
+#doc-list-frame li.author-group .author-name {
+  font:bold 1em georgia, arial, Helvetica, sans-serif;
+  color:#999;  
+  padding-bottom:0px;
+  margin-bottom:5px;
+  padding-left:10px; 
+}
+
+#doc-list-frame li.author-group .author-name a { color:#999; }
+
+
+#doc-list-frame li.author-group ol.documents {
+  list-style-type:none;
+  margin:0px;padding:0px;
+  padding-left:25px;
+}
+
+#doc-list-frame li.doc, 
+#doc-list-frame li.author-group ol.documents li.doc {
+ /* margin-left:2ex;
+  text-indent:-2ex; */
+  border-top:1px solid #DDF;
+  margin-bottom:10px;
+  padding-bottom:3px;
+}
+
+#doc-list-frame li.doc:first-child, 
+#doc-list-frame li.author-group ol.documents li.doc:first-child {
+ /* margin-left:2ex;
+  text-indent:-2ex; */
+  border-top:0px solid #DDF;
+  margin-bottom:10px;
+  padding-bottom:3px;
+}
+
+#doc-list-frame li.doc span.pubinfo, 
+#doc-list-frame li.author-group ol.documents li.doc span.pubinfo {
+  display:block;
+  margin-left:2em; 
+  color:#666;
+}
+
+#doc-list-frame li.doc .search-links, 
+#doc-list-frame li.author-group ol.documents li.doc .search-links {
+  text-align:right;
+  margin-left:2ex;
+  font-size:.85em;
+  line-height:1.2em;
+}
