@@ -1,0 +1,49 @@
+# MyComponent Build Properties
+#
+# This is a general purpose template for use as a starting point to create
+# new JavaScript components based on the YUI3 library. To get started with a 
+# new component edit this file to contain the basic configuration details 
+# for the compoent (component name, component files, etc)
+
+# For IDCH projects, rather than cloneing the 'builder' project to the default 
+# folder next to the 'yui3' (or similar) project folder, we recommend placing
+# the builder project (or a symbolic link) in a common directory that can 
+# be referenced independently of the path to your current source code 
+# directory. On Unix base systems, we recommend ~/.yui/builder
+#
+# If the 'builder' project is checked out to an alternate location, this
+# property should be updated to point to the checkout location.
+builddir=~/.yui/builder/componentbuild
+
+# This is where the final built components will be written to and contains 
+# additional meta information about the package. If you've used the 
+# recommended flat directory structure to organize your JavaScript source 
+# code, this should be the correct configuration. If you've opted for a 
+# different layout, you may need to change this accordingly.
+srcdir=../..     # The JavaScript source directory for your project. 
+
+# The location that built scripts will be written to. This overwrites the 
+# default YUI configuration setting of placing the built files directly into
+# ${srcdir}/build since this directory is used to store a wide variety of build
+# artifacts from other application components (e.g., compiled Java classes).
+global.build.base=${srcdir}/build/js
+
+# The name of the component. E.g. event, attribute, widget 
+# To avoid conflicting names, we recommend adding a prefix based on the 
+# project that resource is affiliated with. # e.g. idch-*, lha-*, nttext-*
+component=mycomponent 
+
+# The list of files which should be concatenated to create the component.
+# NOTE: For a css component (e.g. cssfonts, cssgrids etc.) use component.cssfiles instead. 
+component.jsfiles=MyComponent.js, MyExtension.js MyPlugin.js MyWidget.js
+
+# The list of modules this component requires. Used to setup the Y.add 
+# module call for YUI 3.
+# NOTE: For a css component, this property is not used/required.
+
+# Other relevant component properties are: 
+# component.use=
+# component.supersedes=
+# component.optional= 
+# component.skinnable=
+component.requires=node, attribute, queue

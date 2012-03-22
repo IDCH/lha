@@ -1,0 +1,5 @@
+build.properties
+
+# exclude directories with generated data
+build_tmp
+docs

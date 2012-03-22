@@ -1,0 +1,28 @@
+{
+    "name": "lha",
+    "version": "0.2",
+    "description": "Library of Historical Apologetics Utilities"
+    "author": "Neal Audenaert <neal@idch.org>",
+    "bugs": { "url" : "https://github.com/IDCH/lha/issues" },
+    "os": ["ubuntu", "linux"],
+    "engines": {
+        "node" : ">=0.4.0"
+    },
+    "directories": {
+        "lib" : "."
+    },
+    "main": "./index.js",
+    "dependencies": {
+        "request": "2.9.100"
+    },
+    "licenses":[
+        {
+            "type" : "GPL 3.0",
+            "url" : "http://www.gnu.org/licenses/gpl.txt"
+        }
+    ],
+    "repository": {
+        "type":"git",
+        "url":"http://github.com/IDCH/lha.git"
+    }
+}
